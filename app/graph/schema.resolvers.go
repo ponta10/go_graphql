@@ -12,8 +12,10 @@ import (
 )
 
 
-// CreateTodo is the resolver for the createTodo field.
+// 新しいTodoを作成し、そのTodoのリストに追加するためのGraphQLミューテーションリゾルバー。
+// model.NewTodo型の入力パラメータを受け取ります。このパラメータは新しいTodoの情報を含んでいます
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	// 新しいTodoを作成します。model.Todo構造体を生成し、それぞれに設定します
 	todo := &model.Todo{
 		Text: input.Text,
 		ID:   fmt.Sprintf("T%d", rand.Int()),
