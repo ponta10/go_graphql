@@ -7,9 +7,9 @@ const Home: React.FC = () => {
   return (
     <ApolloProvider client={apolloClient}>
       <div>
-        <h2>Todo List</h2>
+        <h2>Todoリスト</h2>
         <TodoList />
-        <h2>Add Todo</h2>
+        <h2>Todo追加</h2>
         <AddTodo />
       </div>
     </ApolloProvider>

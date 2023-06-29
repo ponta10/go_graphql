@@ -1,8 +1,9 @@
 import { useMutation, gql } from '@apollo/client';
+import { useForm } from 'react-hook-form';
 
 const CREATE_TODO = gql`
-  mutation {
-    createTodo(input: { text: "ゴミ捨て", userId: "1" }) {
+  mutation CreateTodo($text: String!, $userId: String!) {
+    createTodo(input: { text: $text, userId: $userId }) {
       id
       text
       done
@@ -10,14 +11,26 @@ const CREATE_TODO = gql`
   }
 `;
 
+type FormData = {
+  text: string;
+  userId: string;
+};
+
 const AddTodo: React.FC = () => {
+  const { register, handleSubmit } = useForm<FormData>();
   const [createTodo, { data }] = useMutation(CREATE_TODO);
 
+  const onSubmit = handleSubmit(({ text, userId }) => {
+    createTodo({ variables: { text, userId } });
+  });
+
   return (
-    <div>
-      <button onClick={() => createTodo()}>Add Todo</button>
+    <form onSubmit={onSubmit}>
+      <input {...register('text')} placeholder="Todo text" />
+      <input {...register('userId')} placeholder="User ID" />
+      <button type="submit">Add Todo</button>
       {data && <p>Todo added: {data.createTodo.text}</p>}
-    </div>
+    </form>
   );
 };
 
