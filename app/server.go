@@ -3,10 +3,11 @@ package main
 import (
 	"go_graphql/graph"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,15 +20,18 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		AllowCredentials: true,
+	}))
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
+	r.GET("/", gin.WrapF(playground.Handler("GraphQL playground", "/query")))
 	r.POST("/query", gin.WrapH(srv))
-	r.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusTemporaryRedirect, "/query")
-	})
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(r.Run(":" + port))
+	r.Run(":" + port) // デフォルトでPanicが発生するので、log.Fatalは不要
 }
-
