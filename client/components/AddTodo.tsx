@@ -11,17 +11,18 @@ const CREATE_TODO = gql`
   }
 `;
 
-type FormData = {
+interface FormData {
   text: string;
   userId: string;
 };
 
 const AddTodo: React.FC = () => {
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
   const [createTodo, { data }] = useMutation(CREATE_TODO);
 
   const onSubmit = handleSubmit(({ text, userId }) => {
     createTodo({ variables: { text, userId } });
+    reset();
   });
 
   return (
