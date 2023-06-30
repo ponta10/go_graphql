@@ -1,4 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
+import styled from 'styled-components';
 
 const GET_TODOS = gql`
   query {
@@ -13,6 +14,10 @@ const GET_TODOS = gql`
   }
 `;
 
+const TodoItem = styled.li`
+  margin-bottom: 10px;
+`;
+
 const TodoList: React.FC = () => {
   const { loading, error, data } = useQuery(GET_TODOS);
 
@@ -22,7 +27,7 @@ const TodoList: React.FC = () => {
   return (
     <ul>
       {data.todos.map(({ id, text }: { id: number, text: string }) => (
-        <li key={id}>{text}</li>
+        <TodoItem key={id}>{text}</TodoItem>
       ))}
     </ul>
   );

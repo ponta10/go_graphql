@@ -1,5 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 
 const CREATE_TODO = gql`
   mutation CreateTodo($text: String!, $userId: String!) {
@@ -16,6 +17,28 @@ interface FormData {
   userId: string;
 };
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #0070f3;
+  color: white;
+  cursor: pointer;
+`;
+
 const AddTodo: React.FC = () => {
   const { register, handleSubmit, reset } = useForm<FormData>();
   const [createTodo, { data }] = useMutation(CREATE_TODO);
@@ -26,12 +49,12 @@ const AddTodo: React.FC = () => {
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      <input {...register('text')} placeholder="Todo text" />
-      <input {...register('userId')} placeholder="User ID" />
-      <button type="submit">Add Todo</button>
+    <Form onSubmit={onSubmit}>
+      <Input {...register('text')} placeholder="Todo text" />
+      <Input {...register('userId')} placeholder="User ID" />
+      <Button type="submit">Add Todo</Button>
       {data && <p>Todo added: {data.createTodo.text}</p>}
-    </form>
+    </Form>
   );
 };
 
