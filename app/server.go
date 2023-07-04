@@ -29,6 +29,7 @@ func main() {
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
+	// playground.Handlerは、ブラウザ上でGraphQLクエリを試すことができる"GraphQL playground"というツールを提供します。"/query"はGraphQLリクエストを送信するエンドポイントを示します。
 	r.GET("/", gin.WrapF(playground.Handler("GraphQL playground", "/query")))
 	r.POST("/query", gin.WrapH(srv))
 

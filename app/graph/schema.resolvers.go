@@ -27,6 +27,7 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 
 // Todos is the resolver for the todos field.
 // todos query 用のリゾルバー
+// Resolverという型がtodosというスライスを持っており、そのスライスはサーバが動作している間はメモリに保存されます。そのため、このサーバの再起動までtodosの値は保持され続けます。
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
 }
